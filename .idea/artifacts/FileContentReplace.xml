@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FileContentReplace">
+    <output-path>$PROJECT_DIR$/out/artifacts/FileContentReplace</output-path>
+    <root id="archive" name="FileContentReplace.jar">
+      <element id="module-output" name="FileContentRepalce" />
+    </root>
+  </artifact>
+</component>
