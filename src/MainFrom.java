@@ -25,7 +25,6 @@ public class MainFrom {
     private JTextField newcontent;
     private JLabel lable0;
     private JButton startButton;
-    private JLabel msg;
     private JTextArea msgpan;
     private static ArrayList fileList = new ArrayList();
 
@@ -33,6 +32,7 @@ public class MainFrom {
     public static void main(String[] args) {
         JFrame frame = new JFrame("MainFrom");
         frame.setTitle("文件内容批量替换工具---by QQ:306955302");
+        frame.setResizable(false);
         frame.setContentPane(new MainFrom().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -54,8 +54,7 @@ public class MainFrom {
                 } else {
                     File f = chooser.getSelectedFile();// f为选择到的目录
                     inputfilePath.setText(f.getAbsolutePath());
-                    msg.setText("目录已选择");
-
+                    msgpan.setText("目录已选择..........\r\n");
                 }
             }
         });
@@ -65,14 +64,14 @@ public class MainFrom {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileList=new ArrayList();
+                fileList = new ArrayList();
                 SwingWorker worker = new SwingWorker() {
                     @Override
                     protected Object doInBackground() throws Exception {
                         msgpan.setText("");
                         choseFilePathbutton.setEnabled(false);
                         startButton.setEnabled(false);
-                        Pattern regx= Pattern.compile(".*\\." + filehouzui.getText().toLowerCase());
+                        Pattern regx = Pattern.compile(".*\\." + filehouzui.getText().toLowerCase());
                         msgpan.setText("开始扫描文件..........\r\n");
                         /**
                          * 查找文件
@@ -80,14 +79,14 @@ public class MainFrom {
                         searchFile(new File(inputfilePath.getText()), regx, fileList);
 
 
-                        msgpan.setText(msgpan.getText()+"文件总数:" + fileList.size()+"\r\n");
+                        msgpan.setText(msgpan.getText() + "文件总数:" + fileList.size() + "\r\n");
                         /**
                          * 替换文件
                          */
-                        msgpan.setText(msgpan.getText() + "替换开始!"  + "\r\n");
+                        msgpan.setText(msgpan.getText() + "替换开始!" + "\r\n");
                         msgpan.setText(msgpan.getText() + "替换开始!----start" + "\r\n");
                         for (int i = 0; i < fileList.size(); i++) {
-                            replaceFile(String.valueOf(fileList.get(i)), oldcontetn.getText(),newcontent.getText());
+                            replaceFile(String.valueOf(fileList.get(i)), oldcontetn.getText(), newcontent.getText());
                         }
                         msgpan.setText(msgpan.getText() + "替换完成!----end" + "\r\n");
                         msgpan.setText(msgpan.getText() + "完成!!!" + "\r\n");
@@ -102,7 +101,13 @@ public class MainFrom {
         });
     }
 
-    public  void searchFile(File folder, Pattern regex, ArrayList list) {
+    /**
+     * 根据规则扫描文件
+     * @param folder
+     * @param regex
+     * @param list
+     */
+    public void searchFile(File folder, Pattern regex, ArrayList list) {
         File[] files = folder.listFiles();
         if (files == null) {
             msgpan.setText(msgpan.getText() + "不能访问：" + folder.getAbsolutePath() + "\r\n");
@@ -119,7 +124,12 @@ public class MainFrom {
         }
     }
 
-
+    /**
+     * 根据规则替换文件内容
+     * @param path
+     * @param luanStr
+     * @param newStr
+     */
     public void replaceFile(String path, String luanStr, String newStr) {
         File file = new File(path);
         String encoding = "utf-8";
