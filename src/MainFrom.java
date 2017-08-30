@@ -1,8 +1,17 @@
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.regex.Pattern;
 
 /**
@@ -30,13 +39,55 @@ public class MainFrom {
 
 
     public static void main(String[] args) {
+        try {
+            Font fnt = new Font("Microsoft YaHei UI", Font.PLAIN, 14);
+            FontUIResource fontRes = new FontUIResource(fnt);
+            for (Enumeration keys = UIManager.getDefaults().keys(); keys.hasMoreElements(); ) {
+                Object key = keys.nextElement();
+                Object value = UIManager.get(key);
+                if (value instanceof FontUIResource)
+                    UIManager.put(key, fontRes);
+            }
+            String theme="BeautyEye";
+            switch (theme) {
+                case "BeautyEye":
+                    BeautyEyeLNFHelper.launchBeautyEyeLNF();
+                    UIManager.put("RootPane.setupButtonVisible", false);
+                    break;
+                case "系统默认":
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    break;
+                case "Windows":
+                    UIManager.setLookAndFeel(WindowsLookAndFeel.class.getName());
+                    break;
+                case "Nimbus":
+                    UIManager.setLookAndFeel(NimbusLookAndFeel.class.getName());
+                    break;
+                case "Metal":
+                    UIManager.setLookAndFeel(MetalLookAndFeel.class.getName());
+                    break;
+                case "Motif":
+                    UIManager.setLookAndFeel(MotifLookAndFeel.class.getName());
+                    break;
+                case "Darcula(推荐)":
+                default:
+                    UIManager.setLookAndFeel("com.bulenkov.darcula.DarculaLaf");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JFrame frame = new JFrame("MainFrom");
         frame.setTitle("文件内容批量替换工具---by QQ:306955302");
         frame.setResizable(false);
+        int w = 600, h = 600;
+        int x = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - (w / 2));
+        int y = (int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - (h / 2));
         frame.setContentPane(new MainFrom().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setBounds(x, y, w, h);
+
     }
 
     public MainFrom() {
